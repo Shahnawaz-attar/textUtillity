@@ -1,24 +1,59 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import { About } from './components/About';
+import { Alert } from './components/Alert';
+import { Navbar } from './components/Navbar';
+import { TextForm } from './components/TextForm';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
 
 function App() {
+  const [mode, setMode] = useState('light') ;
+
+  const handleModeChange = () => {
+    setMode(mode === 'light' ? 'dark' : 'light');
+    showAlert('Mode changed ' , mode);
+  }
+
+  const [alert, setAlert] = useState(null)
+  
+
+  const showAlert = (message ,type) => {
+    setAlert(
+      {
+        message: message,
+        type: type
+      }
+    )
+
+    setTimeout(() => {
+      setAlert(null)
+    } , 3000)
+  
+    
+
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  
+    <Router>
+      <div className="container">
+      <Navbar title="Text Utils" mode={mode} handleToggle={handleModeChange} />
+      <Alert alert={alert} />
+      
+     
+      <Routes>
+        <Route path="/" element={<TextForm heading="Enter the text to analyse" showAlert={showAlert} />} /> 
+          
+ 
+        <Route path="/about"  element={<About/>} />  
+       
+      </Routes>
+      </div>
+      </Router>
+
+
+
   );
 }
 
